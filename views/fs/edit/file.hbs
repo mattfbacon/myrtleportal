@@ -1,0 +1,47 @@
+{{>fs/edit/breadcrumb}}
+<form method="POST" action="/portal/{{requestedApparentPath}}"><h3>Rename File on Disk</h3>
+  <label for="newFilenameInput">New Filename</label>
+  <input type="text" name="newFilename" value="{{entryData.filename}}" required id="newFilenameInput">
+  <small style="display:block;margin-top:.75em;margin-bottom:1.5rem;">The file will not be shown correctly if the wrong (or no) extension is provided. Take care to preserve the file's original extension when renaming. <span id="extensionMismatchWarning" aria-live="off" class="text-contrast"></span></small>
+  {{#if filenameTaken}}<p>This name is taken or is unchanged. Please choose another name, or, if the name isn't unchanged, delete/rename the file/directory with this name.</p>{{/if}}
+  <button type="submit">Rename</button>
+</form>
+<form method="POST" action="/portal/{{requestedApparentPath}}"><h3>Edit Metadata</h3>
+  <label for="inputName">Name</label>
+  <input id="inputName" type="text" name="name" value="{{entryData.name}}" maxlength="60" required>
+  <label for="inputDescr">Description</label>
+  <input id="inputDescr" type="text" name="descr" value="{{entryData.descr}}" maxlength="255" required>
+  <button type="submit">Apply Changes</button>
+  <button type="reset">Discard Changes</button>
+</form>
+<form method="POST" action="/portal/{{requestedApparentPath}}" enctype="multipart/form-data"><h3>Replace File</h3>
+  <label for="fReplaceInput"
+  <input type="file" name="replacement" required id="fReplaceInput">
+  <button type="submit">Replace File</button>
+</form>
+<br>
+<form method="POST" action="/portal/{{requestedApparentPath}}">
+  <input type="hidden" name="delete" value="yesactuallydeletethis">
+  <button type="submit" class="button-invert">Delete File</button>
+</form>
+{{>fs/edit/footer}}
+
+<script>
+  var filename = '{{entryData.filename}}';
+  var nameInput = document.getElementById('newFilenameInput');
+  var errorText = document.getElementById('extensionMismatchWarning');
+
+  nameInput.addEventListener('input', function () {
+    var fileParsed = filename.split('.');
+    var nameParsed = nameInput.value.split('.');
+    // essentially make sure there is input for both inputs, then exit early if the file's name and the given name completely match, otherwise make sure they both have extensions before verifying that the extensions match.
+    //  there is a given name     and there is a selected file    and their names don't match outright and it's not true that the file's name or the given name both have extensions and their extensions match.
+    if (nameInput.value.length > 0 && filename !== nameInput.value && !(fileParsed.length > 1 && nameParsed.length > 1 && fileParsed.slice(-1)[0] === nameParsed.slice(-1)[0])) {
+      errorText.innerText = 'Warning: Extensions do not match.';
+      errorText.setAttribute('aria-live', 'polite')
+    } else {
+      errorText.innerText = '';
+      errorText.setAttribute('aria-live', 'off');
+    }
+  }, { passive: true });
+</script>

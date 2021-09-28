@@ -1,0 +1,99 @@
+{{>fs/edit/breadcrumb}}
+{{#if actionNotification}}<p>{{{actionNotification}}}</p>{{/if}}
+{{#if notRoot}}
+<form method="POST" action="/portal/{{requestedApparentPath}}"><h3>Rename Directory on Disk</h3>
+  <label for="newDirnameInput">New Directory Name</label>
+  <input type="text" name="newDirname" value="{{entryData.filename}}" required id="newDirnameInput">
+  {{#if dirnameTaken}}<p>This name is taken or is unchanged. Please choose another name, or, if it isn't unchanged, delete/rename the directory/file with this name.</p>{{/if}}
+  <button type="submit">Rename</button>
+</form>{{/if}}
+<form method="POST" action="/portal/{{requestedApparentPath}}"><h3>Create New Subdirectory</h3>
+  <label for="inputDirname">Subdirectory Name</label>
+  <input type="text" name="createDirname" required id="inputDirname">
+  {{#if createDirnameTaken}}<p>This name is taken. Please choose another name or delete/rename the directory/file with this name.</p>{{/if}}
+  <label for="includeDirMetadata" style="display:inline-block;">Also add metadata?</label>
+  <input type="checkbox" id="includeDirMetadata" name="includeDirMetadata" value="yes" checked>
+  <fieldset id="dirMetadataOptions">
+    <legend>Metadata</legend>
+    <label for="metadataDirName">Name</label>
+    <input type="text" name="metadataDirName" required maxlength="60" id="metadataDirName">
+    <label for="metadataDirDescr">Description</label>
+    <input type="text" name="metadataDirDescr" required maxlength="255" id="metadataDirDescr">
+  </fieldset>
+  <button type="submit">Create</button>
+</form>
+<form method="POST" action="/portal/{{requestedApparentPath}}"><h3>Edit Metadata</h3>
+  <label for="inputName">Name</label>
+  <input id="inputName" type="text" name="name" value="{{entryData.name}}" maxlength="60" required>
+  <label for="inputDescr">Description</label>
+  <input id="inputDescr" type="text" name="descr" value="{{entryData.descr}}" maxlength="255" required>
+  <button type="submit">Apply Changes</button>
+  <button type="reset">Discard Changes</button>
+</form>
+<form method="POST" action="/portal/{{requestedApparentPath}}" enctype="multipart/form-data"><h3>Add A File to This Directory</h3>
+  <label for="fUploadInput">File</label>
+  <input id="fUploadInput" name="upload" type="file" required>
+  <label for="uploadNameInput">Name on server (leave blank to use file name) <abbr title="Only alphanumerics, periods, dashes, and underscores, with the first character only being a letter or period.">(Requirements)</abbr></label>
+  <input style="margin-bottom:0;" id="uploadNameInput" type="text" name="filename" placeholder="Filename including extension" pattern="([a-zA-Z.][a-zA-Z0-9.-_]*|)">
+  <small style="display:block;margin-top:.75em;margin-bottom:1.5rem;">The file will not be shown correctly if the wrong (or no) extension is provided. Take care to preserve the file's original extension when renaming. <span id="extensionMismatchWarning" aria-live="off" class="text-contrast"></span></small>
+  {{#if filenameTaken}}<p>This filename is taken. Please choose another, or delete/rename the existing file.</p>{{/if}}
+  <label for="includeMetadata" style="display:inline-block;">Also add metadata?</label>
+  <input type="checkbox" id="includeMetadata" name="includeMetadata" value="yes" checked>
+  <fieldset id="metadataOptions">
+    <legend>Metadata</legend>
+    <label for="metadataName">Name</label>
+    <input type="text" name="metadataName" required maxlength="60" id="metadataName">
+    <label for="metadataDescr">Description</label>
+    <input type="text" name="metadataDescr" required maxlength="255" id="metadataDescr">
+  </fieldset>
+  <button type="submit">Upload</button>
+</form>
+<br>
+<form method="POST" action="/portal/{{requestedApparentPath}}">
+  <input type="hidden" name="empty" value="yesactuallyemptythis">
+  <button type="submit" class="button-invert">Empty Directory <abbr title="Delete all of the contents of the directory.">?</abbr></button>
+</form>
+<form method="POST" action="/portal/{{requestedApparentPath}}">
+  <input type="hidden" name="delete" value="yesactuallydeletethis">
+  <button type="submit" class="button-invert">Delete Directory</button>
+</form>
+{{>fs/edit/footer}}
+
+<script>
+  var fileInput = document.getElementById('fUploadInput');
+  var nameInput = document.getElementById('uploadNameInput');
+  var errorText = document.getElementById('extensionMismatchWarning');
+
+  function checkExtMatch() {
+    var fileParsed = fileInput.files[0].name.split('.');
+    var nameParsed = nameInput.value.split('.');
+    // essentially make sure there is input for both inputs, then exit early if the file's name and the given name completely match, otherwise make sure they both have extensions before verifying that the extensions match.
+    //  there is a given name     and there is a selected file    and their names don't match outright and it's not true that the file's name or the given name both have extensions and their extensions match.
+    if (nameInput.value.length > 0 && fileInput.files.length !== 0 && fileInput.files[0].name !== nameInput.value && !(fileParsed.length > 1 && nameParsed.length > 1 && fileParsed.slice(-1)[0] === nameParsed.slice(-1)[0])) {
+      errorText.innerText = 'Warning: Extensions do not match.';
+      errorText.setAttribute('aria-live', 'polite')
+    } else {
+      errorText.innerText = '';
+      errorText.setAttribute('aria-live', 'off');
+    }
+  }
+
+  fileInput.addEventListener('input', function () {
+    if (fileInput.files.length !== 0) nameInput.setAttribute('placeholder', fileInput.files[0].name); else nameInput.setAttribute('placeholder', 'Filename including extension');
+    checkExtMatch();
+  }, { passive: true });
+  nameInput.addEventListener('input', function () {
+    checkExtMatch();
+  }, { passive: true });
+
+  var metadataInputs = document.querySelectorAll('#metadataOptions > input');
+  var dirMetadataInputs = document.querySelectorAll('#dirMetadataOptions > input');
+
+  document.getElementById('includeMetadata').addEventListener('input', function () {
+    if (this.checked) metadataInputs.forEach(el => { el.removeAttribute('disabled'); }); else metadataInputs.forEach(el => { el.setAttribute('disabled', ''); });
+  });
+
+  document.getElementById('includeDirMetadata').addEventListener('input', function () {
+    if (this.checked) dirMetadataInputs.forEach(el => { el.removeAttribute('disabled'); }); else metadataInputs.forEach(el => { el.setAttribute('disabled', ''); });
+  });
+</script>

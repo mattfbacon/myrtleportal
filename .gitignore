@@ -125,7 +125,7 @@ dist
 # OURS
 # ---
 
-lastlog
-log
-tmp
-fs
+./lastlog
+./log
+./tmp
+./fs

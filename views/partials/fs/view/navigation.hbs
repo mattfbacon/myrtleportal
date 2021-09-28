@@ -1,0 +1,8 @@
+<div id="navigation">
+  {{#if disableHome}}<strong>Home</strong>{{else}}<a style="grid-area:home;" href="/portal" role="button" class="button button-clear">Home</a>{{/if}}
+  {{#if links.first}}<a style="grid-area:first;" href="/portal/{{links.first}}" role="button" class="button button-clear">First</a>{{/if}}
+  {{#if links.previous}}<a style="grid-area:prev;" href="/portal/{{links.previous}}" role="button" class="button button-clear">Previous</a>{{/if}}
+  {{#if links.up}}<a style="grid-area:up;" href="/portal{{links.up}}" role="button" class="button button-clear">Up</a>{{/if}}
+  {{#if links.next}}<a style="grid-area:next;" href="/portal/{{links.next}}" role="button" class="button button-clear">Next</a>{{/if}}
+  {{#if links.last}}<a style="grid-area:last;" href="/portal/{{links.last}}" role="button" class="button button-clear">Last</a>{{/if}}
+</div>

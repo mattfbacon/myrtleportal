@@ -1,0 +1,13 @@
+{{>fs/view/breadcrumb}}
+{{>fs/view/header}}
+{{#if contents}}
+<ul role="directory">
+{{#each contents}}
+<li><a href="/portal/{{path}}"><img role="contentinfo" src="/res/img/{{#if isDirectory}}folder{{else}}file{{/if}}.svg" alt="{{#if isDirectory}}Folder{{else}}File{{/if}}">{{name}}</a></li>
+{{/each}}
+</ul>
+{{else}}
+<p>(Empty)</p>
+{{/if}}
+{{>fs/view/footer}}
+{{>fs/view/navigation}}

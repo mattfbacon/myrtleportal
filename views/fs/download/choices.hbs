@@ -1,0 +1,31 @@
+<h3>This folder can be downloaded in three formats: tar.gz, tar.xz, or zip.</h3>
+<h4>Here is a rudimentary comparison on a folder with mostly text:</h4>
+<figure>
+<table>
+  <thead>
+    <tr>
+      <td aria-hidden="true"></td>
+      <th scope="col">tar.gz</th>
+      <th scope="col">tar.xz</th>
+      <th scope="col">zip</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Speed</th>
+      <td>Faster (only a bit slower than zip)</td>
+      <td>Much slower</td>
+      <td>Fastest but not by much</td>
+    </tr>
+    <tr>
+      <th scope="row">Resulting Size</th>
+      <td>30% of original</td>
+      <td>19% of original</td>
+      <td>34% of original</td>
+    </tr>
+  </tbody>
+</table>
+<figcaption>Note: compression efficiency is much lower for images and videos than for text.</figcaption>
+</figure>
+<p>Essentially, if you have fast internet, pick tar.gz or zip, otherwise go with tar.xz, because you'll be waiting longer for the (de)compression if you pick tar.xz.</p>
+<div id="options" style="text-align:center;"><a href="/portal/{{requestedApparentPath}}?download&format=gz" class="button button-clear">Download as tar.gz</a><a class="button button-clear" href="/portal/{{requestedApparentPath}}?download&format=xz">Download as tar.xz</a><a class="button button-clear" href="/portal/{{requestedApparentPath}}?download&format=zip">Download as zip</a></div>
