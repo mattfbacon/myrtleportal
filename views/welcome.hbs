@@ -1,0 +1,21 @@
+{{#with user}}
+<h2>Hello, {{username}}!</h2>
+<h3>Your permissions are as follows:</h3>
+{{#if ../hasAnyPermissions}}
+<ul id="permissions">
+  {{#if view}}<li>View</li>{{/if}}
+  {{#if edit}}<li>Edit</li>{{/if}}
+  {{#if download}}<li>Download</li>{{/if}}
+</ul>
+{{else}}
+<p>(No permissions)</p>
+{{/if}}
+{{#if admin}}<p>Additionally, you are a site admin.</p>{{/if}}
+<p>(If you believe these are in error, please contact the site owner.)</p>
+{{/with}}
+{{#if user.view}}<a role="button" href="/portal" class="button">Enter Portal</a>{{/if}}
+<div id="options">
+  <a role="button" href="/settings" class="button button-clear">Account Settings</a>
+  {{#if user.admin}}<a role="button" href="/adminpanel" class="button button-clear">Admin Panel</a>{{/if}}
+  <a role="button" href="/logout" class="button button-clear">Log Out</a>
+</div>

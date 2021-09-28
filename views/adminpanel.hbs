@@ -1,0 +1,84 @@
+<h2 style="text-align:center;">Admin Panel</h2>
+{{#if failMessage}}<p>{{failMessage}}</p>{{/if}}
+{{#if actionNotification}}<p>{{actionNotification}}</p>{{/if}}
+<div class="row">
+<table aria-label="Select user to update or delete">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Username</th>
+    </tr>
+  </thead>
+  <tbody role="tablist">
+    {{#if selectedUser}}
+      {{#each users as |user|}}
+      <tr id="tab{{user.id}}" aria-selected="{{equal user.id ../selectedUser.id}}" {{#if (equal user.id ../selectedUser.id)}}tabindex="0" aria-controls="user-data"{{else}}tabindex="-1" aria-controls="user-data"{{/if}} role="tab" onclick="document.location.href = '/adminpanel?user={{user.id}}';">
+        <td>{{user.id}}</td>
+        <td>{{user.username}}</td>
+      </tr>
+      {{/each}}
+    {{else}}
+      {{#each users as |user|}}
+      <tr id="tab{{user.id}}" aria-selected="false" tabindex="0" role="tab" onclick="document.location.href = '/adminpanel?user={{user.id}}';">
+        <td>{{user.id}}</td>
+        <td>{{user.username}}</td>
+      </tr>
+      {{/each}}
+    {{/if}}
+  </tbody>
+</table>
+</div>
+<a role="button" href="/adminpanel?user=new">Add User</a>
+
+{{#if selectedUser}}
+<div class="row">
+<form action="/adminpanel" method="POST" role="tabpanel" id="user-data" aria-labelledby="tab{{selectedUser.id}}">
+<table>
+  <thead style="text-align:center;">
+    <tr>
+      <th id="username" rowspan="2" scope="col">Username</th>
+      <th id="password" rowspan="2" scope="col">Password</th>
+      <th id="created-at" rowspan="2" scope="col">Created At</th>
+      <th id="email" rowspan="2" scope="col">Email</th>
+      <th id="perms" colspan="3" scope="colgroup">Permissions</th>
+      <th id="user-type" rowspan="2" scope="col">User Type</th>
+    </tr>
+    <tr>
+      <th id="can-view" scope="col">View</th>
+      <th id="can-edit" scope="col">Edit</th>
+      <th id="can-download" scope="col">Download</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <input name="id" type="hidden" value="{{selectedUser.id}}">
+      <td><input aria-labelledby="username" name="username" type="text" autocomplete="off" value="{{selectedUser.username}}" size="8"></td>
+      <td><input aria-labelledby="password" name="password" type="password" autocomplete="new-password" placeholder="(Enter new password)"></td>
+      <td style="width:1px;"><input style="width:19ch;" aria-labelledby="created-at" name="createdAtDate" type="date" autocomplete="off" value="{{dateof selectedUser.created_at}}"><input style="width:19ch;" aria-labelledby="created-at" name="createdAtTime" type="time" autocomplete="off" step="1" value="{{timeof selectedUser.created_at}}"></td>
+      <td><input aria-labelledby="email" name="email" type="email" autocomplete="off" value="{{selectedUser.email}}"></td>
+      <td class="center-contents"><input style="margin-right:1.5rem" aria-labelledby="can-view" name="perms" type="checkbox" autocomplete="off" value="view" {{#if selectedUser.view}}checked{{/if}}></td>
+      <td class="center-contents"><input aria-labelledby="can-edit" name="perms" type="checkbox" autocomplete="off" value="edit" {{#if selectedUser.edit}}checked{{/if}}></td>
+      <td class="center-contents"><input style="margin-left:1.5rem;" aria-labelledby="can-download" name="perms" type="checkbox" autocomplete="off" value="download" {{#if selectedUser.download}}checked{{/if}}></td>
+      <td><select style="min-width: 11ch;" aria-labelledby="user-type" name="userType"><option value="regular" {{#unless selectedUser.admin}}selected{{/unless}}>User</option><option value="admin" {{#if selectedUser.admin}}selected{{/if}}>Admin</option></select></td>
+    </tr>
+  </tbody>
+</table>
+<button type="submit">Apply Changes</button>
+<button type="reset">Discard Changes</button>
+</form>
+</div>
+<div class="row">
+  <form action="adminpanel" method="POST">
+    <input name="id" type="hidden" value="{{selectedUser.id}}">
+    <input type="hidden" name="delete" value="delete">
+    <button type="submit">Delete User</button>
+  </form>
+</div>
+{{/if}}
+
+<style>
+  .center-contents {
+    text-align:center;
+  }
+</style>
+<script src="/res/js/adminpanel.js"></script>

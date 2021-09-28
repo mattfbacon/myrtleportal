@@ -1,0 +1,16 @@
+{
+  "files": [
+    "server.ts",
+    "server.d.ts"
+  ],
+  "include": [
+    "node_modules/@types/*/*.d.ts",
+    "@types/*/*.d.ts"
+  ],
+  "compileOnSave": true,
+  "compilerOptions": {
+    "lib": ["ES2015", "ES2016", "ES2017", "ES2018", "ES2019", "ES2020", "ESNext"],
+    "sourceMap": false,
+    "strict": true
+  }
+}

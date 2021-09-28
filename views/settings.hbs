@@ -1,0 +1,32 @@
+<h2>Account Settings</h2>
+{{#if actionNotification}}<p>{{actionNotification}}</p>{{/if}}
+{{#if failMessage}}<p>{{failMessage}}</p>{{/if}}
+
+<form method="POST" action="/settings">
+  <label>Username <abbr title="At least six characters, and only containing alphanumerics, dashes, underscores, and periods.">(Requirements)</abbr></label>
+  <input name="username" required placeholder="New username">
+  {{#if usernameError}}<p>{{usernameError}}</p>{{/if}}
+  <button type="submit">Change Username</button>
+</form>
+<form method="POST" action="/settings">
+  <label for="oldpassword">Current Password</label>
+  <input name="oldpassword" type="password" autocomplete="current-password" id="oldpassword" required>
+  {{#if oldPasswordError}}<p>{{oldPasswordError}}</p>{{/if}}
+  <label for="newpassword">New Password <abbr title="At least eight characters, at least one capital letter, at least two numbers, and at least two special characters.">(Requirements)</abbr></label>
+  <input name="newpassword" type="password" autocomplete="new-password" id="newpassword" required>
+  {{#if newPasswordError}}<p>{{newPasswordError}}</p>{{/if}}
+  <label for="confirmpassword">Confirm New Password</label>
+  <input name="confirmpassword" type="password" autocomplete="off" placeholder="Confirm New Password" id="confirmpassword" required>
+  {{#if confirmPasswordError}}<p>{{confirmPasswordError}}</p>{{/if}}
+  <button type="submit">Change Password</button>
+</form>
+<form method="POST" action="/settings">
+  <label for="email">Email</label>
+  <input name="email" type="email" required autocomplete="email" placeholder="New Email" id="email">
+  {{#if emailError}}<p>{{emailError}}</p>{{/if}}
+  <button type="submit">Change Email</button>
+</form>
+<form method="POST" action="/settings">
+  <input type="hidden" name="action" value="delAcct">
+  <button type="submit">Delete Account</button>
+</form>

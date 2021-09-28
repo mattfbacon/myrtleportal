@@ -1,0 +1,78 @@
+{{#if user}}
+<p>You are already logged in. You can click <a href="/welcome">here</a> to go to the welcome page, or <a href="/logout">log out</a>.<br>(Registering a new account here has no effect on your session.)</p>
+{{/if}}
+<h2>Register</h2>
+{{#if failMessage}}<p>{{failMessage}}</p>{{/if}}
+<form method="POST" action="/register">
+  <div class="form-group">
+    <label for="usernameInput">Username <abbr title="At least six characters, and only containing alphanumerics, dashes, underscores, and periods.">(Requirements)</abbr></label>
+    <input name="username" type="text" id="usernameInput" {{#if savedUsername}}value="{{savedUsername}}"{{/if}} required>
+    {{#if usernameMessage}}
+    <p role="alert">{{usernameMessage}}</p>
+    {{/if}}
+  </div>
+
+  <div class="form-group">
+    <label for="emailInput">Email Address (for personal and salient correspondence only; no recurring mail)</label>
+    <input name="email" type="email" id="emailInput" {{#if savedEmail}}value="{{savedEmail}}"{{/if}} required>
+    {{#if emailMessage}}
+    <p role="alert">{{emailMessage}}</p>
+    {{/if}}
+  </div>
+
+  <div class="form-group">
+    <label for="passwordInput">Password <abbr title="At least eight characters, at least one capital letter, at least two numbers, and at least two special characters.">(Requirements)</abbr></label>
+    <input name="password" type="password" id="passwordInput" {{#if savedPassword}}value="{{savedPassword}}"{{/if}} required>
+    {{#if passwordMessage}}
+    <p role="alert">{{passwordMessage}}</p>
+    {{/if}}
+  </div>
+
+  <div class="form-group">
+    <label for="confirmPasswordInput">Confirm Password</label>
+    <input name="confirmPassword" type="password" id="confirmPasswordInput" {{#if savedConfirm}}value="{{savedConfirm}}"{{/if}} required>
+    {{#if confirmMessage}}
+    <p role="alert">{{confirmMessage}}</p>
+    {{/if}}
+  </div>
+
+  <button type="submit">Register</button>
+  <button class="button-outline" type="reset">Reset Fields</button>
+</form>
+<p>You can also <a href="/register">log in</a> if you have an account.</p>
+
+<script>
+  document.getElementById('usernameInput').addEventListener('input', function () {
+    if (this.value.length < 6) {
+      this.setCustomValidity('Username must be at least 6 characters.');
+    } else if (this.value.match(/[^\d\w-.]/g) !== null) {
+      this.setCustomValidity('Username contains invalid characters.');
+    } else {
+      this.setCustomValidity('');
+    }
+  });
+  document.getElementById('passwordInput').addEventListener('input', function () {
+    if (this.value.length < 8) {
+      this.setCustomValidity('Password must be at least 8 characters.');
+    } else if (!(/[A-Z]/.test(this.value))) {
+      this.setCustomValidity('Password must contain a capital letter.');
+    } else if ((this.value.match(/[^\d\w\s]/g) ?? []).length < 2) {
+      this.setCustomValidity('Password must contain at least two special characters.');
+    } else {
+      this.setCustomValidity('');
+    }
+    var confirmInput = document.getElementById('confirmPasswordInput');
+    if (confirmInput.value !== this.value) {
+      confirmInput.setCustomValidity('Passwords do not match.');
+    } else {
+      confirmInput.setCustomValidity('');
+    }
+  });
+  document.getElementById('confirmPasswordInput').addEventListener('input', function () {
+    if (document.getElementById('passwordInput').value !== this.value) {
+      this.setCustomValidity('Passwords do not match.');
+    } else {
+      this.setCustomValidity('');
+    }
+  });
+</script>

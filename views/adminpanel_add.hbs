@@ -1,0 +1,42 @@
+<h2>Add User</h2>
+<h3><a href="/adminpanel">(Cancel)</a></h3>
+
+<form action="/adminpanel" method="POST">
+<table>
+  <thead style="text-align:center;">
+    <tr>
+      <th id="username" rowspan="2" scope="col">Username</th>
+      <th id="password" rowspan="2" scope="col">Password</th>
+      <th id="created-at" rowspan="2" scope="col">Created At</th>
+      <th id="email" rowspan="2" scope="col">Email</th>
+      <th id="perms" colspan="3" scope="colgroup">Permissions</th>
+      <th id="user-type" rowspan="2" scope="col">User Type</th>
+    </tr>
+    <tr>
+      <th id="can-view" scope="col">View</th>
+      <th id="can-edit" scope="col">Edit</th>
+      <th id="can-download" scope="col">Download</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <input type="hidden" name="id" value="new">
+      <td><input aria-labelledby="username" name="username" type="text" autocomplete="off" size="9"><abbr title="At least six characters, and only containing alphanumerics, dashes, underscores, and periods.">Suggestions</abbr></td>
+      <td><input aria-labelledby="password" name="password" type="password" autocomplete="new-password" size="12"><abbr title="At least eight characters, at least one capital letter, at least two numbers, and at least two special characters.">Suggestions</abbr></td>
+      <td style="width:1px;"><input style="width:19ch;" aria-labelledby="created-at" name="createdAtDate" type="date" autocomplete="off" value="{{nowasdate}}"><input style="width:19ch;" aria-labelledby="created-at" name="createdAtTime" type="time" autocomplete="off" step="1" value="{{nowastime}}"></td>
+      <td><input aria-labelledby="email" name="email" type="email" autocomplete="off"></td>
+      <td class="center-contents"><input style="margin-right:1.5rem" aria-labelledby="can-view" name="perms" type="checkbox" autocomplete="off" value="view"></td>
+      <td class="center-contents"><input aria-labelledby="can-edit" name="perms" type="checkbox" autocomplete="off" value="edit"></td>
+      <td class="center-contents"><input style="margin-left:1.5rem" aria-labelledby="can-download" name="perms" type="checkbox" autocomplete="off" value="download"></td>
+      <td><select style="min-width: 11ch;" aria-labelledby="user-type" name="userType"><option value="regular" selected>User</option><option value="admin">Admin</option></select></td>
+    </tr>
+  </tbody>
+</table>
+<button type="submit">Create User</button>
+</form>
+
+<style>
+  .center-contents {
+    text-align:center;
+  }
+</style>

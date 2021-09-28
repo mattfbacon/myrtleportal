@@ -1,0 +1,23 @@
+{{#if user}}
+<p id="already-logged-in">You are already logged in. You can click <a href="/welcome">here</a> to go to the welcome page, or <a href="/logout">log out</a>.<br>(Logging in here will automatically log you out.)</p>
+{{/if}}
+<h2>Login</h2>
+{{#if failMessage}}<p>{{failMessage}}</p>{{/if}}
+<form method="POST" action="/login">
+  <div class="form-group">
+    <label for="usernameInput">Username</label>
+    <input name="username" type="text" id="usernameInput" required>
+    {{#if usernameMessage}}
+    <p>{{usernameMessage}}</p>
+    {{/if}}
+  </div>
+  <div class="form-group">
+    <label for="passwordInput">Password</label>
+    <input name="password" type="password" id="passwordInput" required>
+    {{#if passwordMessage}}
+    <p>{{passwordMessage}}</p>
+    {{/if}}
+  </div>
+  <button type="submit">Login</button>
+</form>
+<p>You can also <a href="/register">register</a> a new account.</p>
